@@ -1,8 +1,4 @@
-<?php
-  include('handing.php');
-  $model = new handing();
-  $model->insert();
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,7 +31,15 @@
         <input type="date" class="form-control" id="ngaysinh"  name="ngaysinh">
       </div>
     <button type="submit" class="btn btn-default" name="btn_insert">Thêm sinh viên</button>
+    
+
   </form>
+  <?php
+  include('handing.php');
+  $model = new handing();
+  $model->insert();
+  ?>
 </div>
 </body>
 </html>
+
