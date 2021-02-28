@@ -14,13 +14,11 @@
 <body>
 
 
-
-
 <?php
     $update = new handing();
     $id = $_REQUEST['id'];
     $row = $update->uploadUD($id);
-    $update->update($id);
+    $magoc = $row["mssv"];
 ?>
 
 
@@ -45,6 +43,12 @@
 
 
   </form>
+  
+<?php
+    
+    $update->update($id,$magoc);
+?>
+
   <?php endif; ?>
 
 

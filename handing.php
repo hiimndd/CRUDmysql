@@ -66,40 +66,9 @@ class handing{
         return $data;
         
     }
-    public function update($id)
+    public function update($id,$magoc)
     {
-        // if(isset($_POST["btn_update"])){
-        //     if(isset($id)){
-        //         $hoten = $_POST["hoten"];
-        //         $mssv = trim($_POST["mssv"]);
-        //         $ngaysinh = $_POST["ngaysinh"];
-        //         //check
-        //         $data = null;
-        //         $query = "SELECT * FROM `thongtin` where mssv = '$mssv'";
-        //         if($sql = $this->conn->query($query)){
-        //             while ($row = mysqli_fetch_assoc($sql)) {
-        //                 $data[] = $row;
-        //             }
-        //         }
-        //         foreach($data as $row){
-        //             if($row["mssv"] === $mssv){
-        //             echo "Trùng mã sinh viên";
-        //             return 0;
-        //             }      
-        //         }
-        //         //check done
-        //         $query = " UPDATE `thongtin` SET `hoten`='$hoten',`mssv`='$mssv',`ngaysinh`='$ngaysinh' WHERE ID = '$id' ";
-        //         if($sql = $this->conn->query($query)){
-        //             header("Location: index.php");
-        //         }else{
-        //             echo "<script>alert('failed!');</script>"; 
-        //         }
-        //         }else{
-        //             echo "Giá trị ID không tồn tại!";
-        //         }
-
-            
-        // }
+        
         if(isset($_POST["btn_update"])){
             if(isset($id)){
                 $hoten = $_POST["hoten"];
@@ -107,31 +76,32 @@ class handing{
                 $ngaysinh = $_POST["ngaysinh"];
                 //check
                 $data = null;
-                $query = "SELECT * FROM `thongtin` where mssv = '$mssv'";
-                $sql = $this->conn->query($query);
-                if(!empty($sql)){
-                    $query = " UPDATE `thongtin` SET `hoten`='$hoten',`mssv`='$mssv',`ngaysinh`='$ngaysinh' WHERE ID = '$id' ";
-                    $sql = $this->conn->query($query);
-                }else if(empty($sql)){
-                    echo "Mã trùng";
-                }else{
-                    s
-                    $query = " UPDATE `thongtin` SET `hoten`='$hoten',`mssv`='$mssv',`ngaysinh`='$ngaysinh' WHERE ID = '$id' ";
-                    $sql = $this->conn->query($query);
+                $query = "SELECT * FROM `thongtin` where mssv != '$magoc'";
+                if($sql = $this->conn->query($query)){
+                    while ($row = mysqli_fetch_assoc($sql)) {
+                        $data[] = $row;
+                    }
+                }
+                foreach($data as $row){
+                    if($row["mssv"] === $mssv){
+                    echo "Trùng mã sinh viên";
+                    return 0;
+                    }      
                 }
                 //check done
-                // $query = " UPDATE `thongtin` SET `hoten`='$hoten',`mssv`='$mssv',`ngaysinh`='$ngaysinh' WHERE ID = '$id' ";
-                // if($sql = $this->conn->query($query)){
-                //     header("Location: index.php");
-                // }else{
-                //     echo "<script>alert('failed!');</script>"; 
-                // }
-                // }else{
-                //     echo "Giá trị ID không tồn tại!";
-            }
+                $query = " UPDATE `thongtin` SET `hoten`='$hoten',`mssv`='$mssv',`ngaysinh`='$ngaysinh' WHERE ID = '$id' ";
+                if($sql = $this->conn->query($query)){
+                    header("Location: index.php");
+                }else{
+                    echo "<script>alert('failed!');</script>"; 
+                }
+                }else{
+                    echo "Giá trị ID không tồn tại!";
+                }
 
             
         }
+        
     }
     public function delete($id){
         
