@@ -1,4 +1,7 @@
+<?php
 
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,33 +15,67 @@
 <body>
 
 <div class="container">
-
+<?php
+    function chainss($i){
+      if(isset($_SESSION["chain"])){
+        echo $_SESSION["chain"][$i];
+      }
+    }
+?>
     
     <h2>THÊM SINH VIÊN</h2>
     
     
   <form action="" method="POST">
     <div class="form-group">
+    
       <label for="hoten">Họ Tên :</label>
-      <input type="text" class="form-control" id="hoten" placeholder="Họ tên sinh viên" name="hoten">
+      
+      <input type="text" class="form-control" id="hoten" value="<?php chainss(0); ?>" placeholder="Họ tên sinh viên" name="hoten">
     </div>
     <div class="form-group">
         <label for="mssv">Mã số sinh viên :</label>
-        <input type="text" class="form-control" id="mssv" placeholder="mã số sinh viên" name="mssv">
+        <input type="text" class="form-control" id="mssv" value="<?php chainss(1); ?>" placeholder="mã số sinh viên" name="mssv">
       </div>
       <div class="form-group">
         <label for="ngaysinh">Ngày sinh :</label>
-        <input type="date" class="form-control" id="ngaysinh"  name="ngaysinh">
+        <input type="date" class="form-control" id="ngaysinh" value="<?php chainss(2); ?>" name="ngaysinh">
       </div>
     <button type="submit" class="btn btn-default" name="btn_insert">Thêm sinh viên</button>
     
 
   </form>
+  <?php if(isset($_SESSION["message"])){
+          echo $_SESSION["message"];
+    } ?>
   <?php
-  include('handing.php');
-  $model = new handing();
-  $model->insert();
+  $_SESSION["message"] = "";
+  $_SESSION["chain"] = array();
+  include('SinhVienManager.php');
+  $model = new SinhVienManager();
+  if(isset($_POST["btn_insert"])){
+    if(empty($_POST["hoten"]) == true or empty($_POST["mssv"]) == true or empty($_POST["ngaysinh"]) == true){
+      $chain = array($_POST["hoten"],$_POST["mssv"],$_POST["ngaysinh"]);
+      $_SESSION["chain"] = $chain;
+      $_SESSION["message"] = "Không thể để trống!";
+      header("Location: insert.php");
+      return $_SESSION["chain"];
+    }
+    if(isset($_SESSION["chain"])){
+      session_unset();
+    }
+    if($model->add_SinhVien($_POST["hoten"],$_POST["mssv"],$_POST["ngaysinh"])==0){
+      $_SESSION["chain"] = array($_POST["hoten"],$_POST["mssv"],$_POST["ngaysinh"]);
+      $_SESSION["message"] = "Trùng Mã sinh viên!";
+      header("Location: insert.php");
+    }
+    
+   
+
+  }
+
   ?>
+  
 </div>
 </body>
 </html>

@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +10,8 @@
 </head>
 <body>
 <?php
-include('handing.php');
+
+include_once 'SinhVienManager.php';
 
 
 ?>
@@ -37,8 +36,9 @@ include('handing.php');
   <tbody>
   <?php 
   
-          $model = new handing();
-          $rows = $model->display();
+          $model = new SinhVienManager();
+          $query = "SELECT * FROM `thongtin`";
+          $rows = $model->getListSinhVien($query);
           if(!empty($rows)){
           foreach($rows as $row){
           

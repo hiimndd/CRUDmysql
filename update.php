@@ -1,5 +1,5 @@
 <?php
-  include('handing.php');
+  include('SinhVienManager.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,13 +15,16 @@
 
 
 <?php
-    $update = new handing();
+    $update = new SinhVienManager();
     $id = $_REQUEST['id'];
-    $row = $update->uploadUD($id);
-    $magoc = $row["mssv"];
+    $query = "SELECT * FROM thongtin Where ID = '$id'";
+    $rows = $update->getListSinhVien($query);
+    
+    foreach($rows as $row){
+      $magoc = $row["mssv"];
+    
+
 ?>
-
-
 <div class="container">
     <h2>sửa thông tin sinh viên</h2>
     <?php if (isset($_GET["id"])): ?>
@@ -40,16 +43,24 @@
         <input type="date" class="form-control" id="ngaysinh"  value="<?php echo $row["ngaysinh"]; ?>" name="ngaysinh">
       </div>
     <button type="submit" class="btn btn-default" name="btn_update">Lưu</button>
-
+    <?php endif; ?>
 
   </form>
   
 <?php
+    }
     
-    $update->update($id,$magoc);
+    if(isset($_POST["btn_update"])){
+      if(empty($_POST["hoten"]) == true or empty($_POST["mssv"]) == true or empty($_POST["ngaysinh"]) == true){
+        echo "Không để trống thông tin sinh viên";
+        return 0;
+      }
+      $update->edit_SinhVien($id,$magoc,$_POST["hoten"],trim($_POST["mssv"]),$_POST["ngaysinh"]);
+    }
+    
 ?>
 
-  <?php endif; ?>
+  
 
 
   
