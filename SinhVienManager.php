@@ -23,7 +23,6 @@
             //check mssv
             $querycheck = "SELECT * FROM `thongtin`";
             if($this->checkID($querycheck,$mssv)){
-                echo "Trùng khóa chính";
                 return 0;
             }
                 
@@ -36,6 +35,7 @@
             }else{
                 echo "<script>alert('failed!');</script>"; 
             }
+            return 1;
             
         }
         

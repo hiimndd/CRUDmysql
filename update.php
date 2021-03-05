@@ -27,6 +27,7 @@
 ?>
 <div class="container">
     <h2>sửa thông tin sinh viên</h2>
+    <a href="index.php?type=text"><button type="button" class="btn btn-default" name="bttxt">Về Trang Chính</button></a> 
     <?php if (isset($_GET["id"])): ?>
   <form  method="POST">
     <div class="form-group">

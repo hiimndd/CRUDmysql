@@ -24,7 +24,7 @@ session_start();
 ?>
     
     <h2>THÊM SINH VIÊN</h2>
-    
+    <a href="index.php?type=text"><button type="button" class="btn btn-default" name="bttxt">Về Trang Chính</button></a> 
     
   <form action="" method="POST">
     <div class="form-group">
@@ -50,7 +50,6 @@ session_start();
     } ?>
   <?php
   $_SESSION["message"] = "";
-  $_SESSION["chain"] = array();
   include('SinhVienManager.php');
   $model = new SinhVienManager();
   if(isset($_POST["btn_insert"])){
@@ -68,6 +67,8 @@ session_start();
       $_SESSION["chain"] = array($_POST["hoten"],$_POST["mssv"],$_POST["ngaysinh"]);
       $_SESSION["message"] = "Trùng Mã sinh viên!";
       header("Location: insert.php");
+    }else{
+      echo "ádkj";
     }
     
    
