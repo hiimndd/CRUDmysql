@@ -12,6 +12,7 @@
 <?php
 
 include_once 'SinhVienManager.php';
+include_once 'sinhvien.php';
 
 
 ?>
@@ -38,18 +39,21 @@ include_once 'SinhVienManager.php';
   
           $model = new SinhVienManager();
           $query = "SELECT * FROM `thongtin`";
-          $rows = $model->getListSinhVien($query);
-          if(!empty($rows)){
-          foreach($rows as $row){
-          
+          $sv = $model->getListSinhVien($query);
+          $index = 0;
+          if(!empty($sv)){
+          foreach($sv as $row){
+            
+            
           ?>
         <tr>
-        <td><?php  echo $row["hoten"]."<br>"; ?></td>
-        <td><?php  echo $row["mssv"]."<br>"; ?></td>
-        <td><?php  echo $row["ngaysinh"]."<br>"; ?></td>
-        <td><a href = "update.php?id=<?php echo $row["ID"]; ?>"><button type="button" class="btn btn-primary">sửa</button><a> </a><a href = "delete.php?id=<?php echo $row["ID"]; ?>" onclick="return confirm('Bạn có chắc muốn xóa thông tin này trong file json?')"><button type="button" class="btn btn-primary">xóa</button></a></td>
+        <td><?php   echo $sv[$index]->get_hoten()."<br>"; ?></td>
+        <td><?php   echo $sv[$index]->get_mssv()."<br>"; ?></td>
+        <td><?php echo $sv[$index]->get_ngaysinh()."<br>"; ?></td>
+        <td><a href = "update.php?id=<?php echo $sv[$index]->get_ID(); ?>"><button type="button" class="btn btn-primary">sửa</button><a> </a><a href = "delete.php?id=<?php echo $sv[$index]->get_ID(); ?>" onclick="return confirm('Bạn có chắc muốn xóa thông tin này trong file json?')"><button type="button" class="btn btn-primary">xóa</button></a></td>
         
-        <?php } }?>
+        <?php $index++;
+      }}?>
       </tr>
     </tbody>
   </table>

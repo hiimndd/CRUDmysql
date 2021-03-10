@@ -67,8 +67,6 @@ session_start();
       $_SESSION["chain"] = array($_POST["hoten"],$_POST["mssv"],$_POST["ngaysinh"]);
       $_SESSION["message"] = "Trùng Mã sinh viên!";
       header("Location: insert.php");
-    }else{
-      echo "ádkj";
     }
     
    

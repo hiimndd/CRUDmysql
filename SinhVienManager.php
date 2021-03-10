@@ -1,17 +1,29 @@
 <?php
     include_once 'connectpdo.php';
+    include 'sinhvien.php';
     Class SinhVienManager extends connectpdo{
         private $list_SinhVien = null;
+        
         public function getListSinhVien($query){
             $sql = $this->conn->prepare($query);
             $sql->execute();
             if($sql->rowCount()>0)
             {
                 while ($row=$sql->fetch(PDO::FETCH_ASSOC)) {
-                    $this->list_SinhVien[] = $row;
+                    
+                    $sv = new sinhvien();
+                    
+                    $sv->set_hoten($row["hoten"]);
+                    $sv->set_mssv($row["mssv"]);
+                    $sv->set_ngaysinh($row["ngaysinh"]);
+                    $sv->set_ID($row["ID"]);
+                    $this->list_SinhVien[] = $sv;
+                   
                 }
             }
+            
             return $this->list_SinhVien;
+            
         }
         public function load_ds_SinhVien($filetype = 'text'){
             
@@ -26,9 +38,20 @@
                 return 0;
             }
                 
-            //done check                
-            $query = "INSERT INTO `thongtin`( `hoten`, `mssv`, `ngaysinh`) VALUES ('$hoten','$mssv','$ngaysinh') ";
+            //done check
+            $sv = new sinhvien();
+            
+            $sv->set_hoten($hoten);
+            $sv->set_mssv($mssv);
+            $sv->set_ngaysinh($ngaysinh);
+
+
+            $query = "INSERT INTO `thongtin`( `hoten`, `mssv`, `ngaysinh`) VALUES (:hoten, :mssv,:ngaysinh) ";
+            
             if($sql = $this->conn->prepare($query)){
+                $sql->bindParam(':hoten',$sv->get_hoten());
+                $sql->bindParam(':mssv',$sv->get_mssv());
+                $sql->bindParam(':ngaysinh',$sv->get_ngaysinh());
                 $sql->execute();
                 echo "<script>alert('records added successfully');</script>";
                 header("Location: index.php");
@@ -49,9 +72,18 @@
                     return 0;
                 }
                 //done
-                $query = " UPDATE `thongtin` SET `hoten`='$hoten',`mssv`='$mssv',`ngaysinh`='$ngaysinh' WHERE ID = '$id' ";
+                $sv = new sinhvien();
+            
+                $sv->set_hoten($hoten);
+                $sv->set_mssv($mssv);
+                $sv->set_ngaysinh($ngaysinh);
+                $query = " UPDATE `thongtin` SET `hoten`= :hoten,`mssv`=:mssv,`ngaysinh`= :ngaysinh WHERE ID = :id ";
 
                 if($sql = $this->conn->prepare($query)){
+                    $sql->bindParam(':hoten',$sv->get_hoten());
+                    $sql->bindParam(':mssv',$sv->get_mssv());
+                    $sql->bindParam(':ngaysinh',$sv->get_ngaysinh());
+                    $sql->bindParam(':id',$id);
                     $sql->execute();
                     header("Location: index.php");
                 }else{
@@ -62,8 +94,9 @@
             }
         }
         public function remove_SinhVien($id){
-            $query = "DELETE FROM thongtin WHERE ID = '$id'";
+            $query = "DELETE FROM thongtin WHERE ID = :id";
             if($sql = $this->conn->prepare($query)){
+                $sql->bindParam(':id',$id);
                 $sql->execute();
                 return true;
             }else{
@@ -71,22 +104,38 @@
             }
         }
         public function checkID($query,$mssv){
-            $data = null ;
-            $sql = $this->conn->prepare($query);
-            $sql->execute();
-            if($sql->rowCount()>0){
-                while ($row=$sql->fetch(PDO::FETCH_ASSOC)) {
-                    $data[] = $row;
+            // $data = null ;
+            // $sql = $this->conn->prepare($query);
+            // $sql->execute();
+            // if($sql->rowCount()>0){
+            //     while ($row=$sql->fetch(PDO::FETCH_ASSOC)) {
+            //         $data[] = $row;
+                    
+            //     }
+            // }
+            
+            $sv = $this->getListSinhVien($query);
+            
+            $index = 0;
+            if(!empty($sv)){
+                foreach($sv as $row){
+                    if($sv[$index]->get_mssv() === $mssv){
+                        return true;
+                    }
+                $index++;
                 }
             }
-            foreach($data as $row){
-                if($row["mssv"] === $mssv){
-                    return true;
-                }      
-            }
+
+            // foreach($data as $row){
+            //     if($row["mssv"] === $mssv){
+            //         return true;
+            //     }      
+            // }
 
             return false;
         }
         
+        
     }
+    
 ?>
