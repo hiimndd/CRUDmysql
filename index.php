@@ -43,8 +43,6 @@ include_once 'sinhvien.php';
           $index = 0;
           if(!empty($sv)){
           foreach($sv as $row){
-            
-            
           ?>
         <tr>
         <td><?php   echo $sv[$index]->get_hoten()."<br>"; ?></td>

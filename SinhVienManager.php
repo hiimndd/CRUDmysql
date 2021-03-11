@@ -5,24 +5,22 @@
         private $list_SinhVien = null;
         
         public function getListSinhVien($query){
+            
             $sql = $this->conn->prepare($query);
             $sql->execute();
             if($sql->rowCount()>0)
             {
                 while ($row=$sql->fetch(PDO::FETCH_ASSOC)) {
-                    
                     $sv = new sinhvien();
-                    
                     $sv->set_hoten($row["hoten"]);
                     $sv->set_mssv($row["mssv"]);
                     $sv->set_ngaysinh($row["ngaysinh"]);
                     $sv->set_ID($row["ID"]);
                     $this->list_SinhVien[] = $sv;
-                   
                 }
             }
             
-            return $this->list_SinhVien;
+           return $this->list_SinhVien;
             
         }
         public function load_ds_SinhVien($filetype = 'text'){
@@ -33,7 +31,7 @@
         }
         public function add_SinhVien($hoten,$mssv,$ngaysinh){
             //check mssv
-            $querycheck = "SELECT * FROM `thongtin`";
+            $querycheck = "SELECT * FROM `thongtin` where mssv = '$mssv'";
             if($this->checkID($querycheck,$mssv)){
                 return 0;
             }
@@ -66,11 +64,15 @@
         public function edit_SinhVien($id,$magoc,$hoten,$mssv,$ngaysinh){
             if(isset($id)){
                 //check
-                $querycheck = "SELECT * FROM `thongtin` where mssv != '$magoc'";
+                
+                $querycheck = "SELECT * FROM `thongtin` where mssv = '$mssv' AND mssv != '$magoc'";
+               
                 if($this->checkID($querycheck,$mssv)){
                     echo "Trùng khóa chính";
                     return 0;
                 }
+                
+                
                 //done
                 $sv = new sinhvien();
             
@@ -104,33 +106,12 @@
             }
         }
         public function checkID($query,$mssv){
-            // $data = null ;
-            // $sql = $this->conn->prepare($query);
-            // $sql->execute();
-            // if($sql->rowCount()>0){
-            //     while ($row=$sql->fetch(PDO::FETCH_ASSOC)) {
-            //         $data[] = $row;
-                    
-            //     }
-            // }
-            
-            $sv = $this->getListSinhVien($query);
-            
-            $index = 0;
-            if(!empty($sv)){
-                foreach($sv as $row){
-                    if($sv[$index]->get_mssv() === $mssv){
-                        return true;
-                    }
-                $index++;
-                }
+            $data = null ;
+            $sql = $this->conn->prepare($query);
+            $sql->execute();
+            if($sql->rowCount()>0){
+                return true;
             }
-
-            // foreach($data as $row){
-            //     if($row["mssv"] === $mssv){
-            //         return true;
-            //     }      
-            // }
 
             return false;
         }

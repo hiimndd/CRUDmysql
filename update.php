@@ -58,6 +58,7 @@
         echo "Không để trống thông tin sinh viên";
         return 0;
       }
+      
       $update->edit_SinhVien($id,$magoc,$_POST["hoten"],trim($_POST["mssv"]),$_POST["ngaysinh"]);
     }
     
